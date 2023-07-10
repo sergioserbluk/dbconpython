@@ -95,6 +95,7 @@ while True:
             if coneccion:
                 id_producto = int(input("Ingrese el id del producto a eliminar: "))
                 consulta = "DELETE FROM productos WHERE id_p={}".format(id_producto)
+                #habia agregado la linea del print
                 print(consulta)
                 cursor = ejecutar_consulta(coneccion, consulta)
                 if cursor:
