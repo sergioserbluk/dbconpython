@@ -1,3 +1,4 @@
+#importo el conector
 import mysql.connector
 
 def conectar():
