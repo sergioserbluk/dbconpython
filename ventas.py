@@ -110,28 +110,53 @@ while True:
     elif menu_princ == "2":
         #menu ventas
         menu_vent=menu_ventas()
-        if menu_vent==1:
+        if menu_vent=="1":
             #listar ventas
             coneccion = conectar()
             if coneccion:
-                consulta = "SELECT * FROM ventas"
+                consulta = "SELECT ventas.nFactura, ventas.fecha, ventas.cliente,detVentas.id_p, detVentas.cantidad, detVentas.importe FROM ventas, detVentas WHERE ventas.nFactura=detVentas.nFactura"
                 cursor = ejecutar_consulta(coneccion, consulta,False)
                 if cursor:
                     for fila in cursor:
                         print(fila)
                 desconectar(coneccion)
-        elif menu_vent==2:
+        elif menu_vent=="2":
             #agregar venta
             coneccion = conectar()
             if coneccion:
+                fecha=input("Ingrese la fecha de la venta: ")
+                cliente=input("Ingrese el cliente: ")
+                nfactura=int(input("Ingrese el numero de factura: "))
+                #monto=float(input("Ingrese el monto: "))
+                consulta = "INSERT INTO ventas(nFactura, fecha, cliente) VALUES ({}, '{}', '{}')".format(nfactura, fecha, cliente)
+                cursor = ejecutar_consulta(coneccion, consulta)
+                coneccion.commit()
+                if cursor:
+                    mibandera=True
                 id_producto = int(input("Ingrese el id del producto: "))
                 cantidad = int(input("Ingrese la cantidad: "))
-                consulta = "INSERT INTO ventas(id_producto, cantidad) VALUES ({}, {})".format(id_producto, cantidad)
+                #busco el precio del producto en la tabla productos
+                consulta = "SELECT precio FROM productos WHERE id_p={}".format(id_producto)
+                cursor = ejecutar_consulta(coneccion, consulta, False)
+                if cursor:
+                    for fila in cursor:
+                        precio=fila[0]
+                #calculo el importe
+                importe=precio*cantidad
+                #agrego el detalle de la venta
+                consulta = "INSERT INTO detVentas(nFactura, id_p, cantidad, importe) VALUES ({}, {}, {}, {})".format(nfactura, id_producto, cantidad, importe)
                 cursor = ejecutar_consulta(coneccion, consulta)
+                coneccion.commit()
+                if cursor:
+                    print("Detalle de venta agregado correctamente")
+                #actualizo el monto de la venta
+                consulta = "UPDATE ventas SET monto=monto+{} WHERE nFactura={}".format(importe, nfactura)
+                cursor = ejecutar_consulta(coneccion, consulta)
+                coneccion.commit()
                 if cursor:
                     print("Venta agregada correctamente")
                 desconectar(coneccion)
-        elif menu_vent==3:
+        elif menu_vent=="3": #falta seguir desde aca
             #editar venta
             coneccion = conectar()
             if coneccion:
@@ -143,7 +168,7 @@ while True:
                 if cursor:
                     print("Venta editada correctamente")
                 desconectar(coneccion)
-        elif menu_vent==4:
+        elif menu_vent=="4":
             #eliminar venta
             coneccion = conectar()
             if coneccion:
@@ -153,7 +178,7 @@ while True:
                 if cursor:
                     print("Venta eliminada correctamente")
                 desconectar(coneccion)
-        elif menu_vent==5:
+        elif menu_vent=="5":
             #salir
             break
         else:
