@@ -1,3 +1,5 @@
 este proyecto se desarrollo para ver casos de 
 uso de bases de datos
 con alumnos de codo a codo
+estamos en la anteultima clase
+
