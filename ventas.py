@@ -4,8 +4,8 @@ import mysql.connector
 def conectar():
     #intentar conectar a la base de datos
     try:
-        coneccion = mysql.connector.connect(host="db4free.net", 
-            user='pruebascodo', password='746650ac', database='pruebascodo')
+        coneccion = mysql.connector.connect(host="127.0.0.1", 
+            user='root', password='', database='pruebascodo')
         return coneccion   
     except mysql.connector.Error as error:
         print("Error al conectar a la base de datos: {}".format(error))
